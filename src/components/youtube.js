@@ -4,7 +4,7 @@ import axios from 'axios';
 import {Skeleton} from '@material-ui/lab'
 import {Grid } from '@material-ui/core'
 
-const KEY = 'AIzaSyAIfceSqlvQFE8gXX2CimVCytuqu1TZzsY';
+const KEY = '';
 const baseURL = 'https://www.googleapis.com/youtube/v3';
 
 const YoutubeVideo = () => {
