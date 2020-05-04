@@ -1,29 +1,89 @@
-import React, { Fragment } from 'react';
+import React, { Fragment , useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
+import axios from 'axios';
+import {Skeleton} from '@material-ui/lab'
+import {Grid } from '@material-ui/core'
 
+const KEY = 'AIzaSyAIfceSqlvQFE8gXX2CimVCytuqu1TZzsY';
+const baseURL = 'https://www.googleapis.com/youtube/v3';
 
 const YoutubeVideo = () => {
 
-    
+    const [videos, setvideos] = useState(null);
+    const idVideo = 'QNwhAdrdwp0';
+
+    useEffect(() => {
+        const getData = async () =>{
+            const primaryVideo = await axios.get(baseURL + '/videos', {
+                params: {
+                    id: idVideo,
+                    key: KEY,
+                    part: 'snippet'
+                }
+            })
+            const relatedVideo = await axios.get(baseURL + '/search', {
+                params: {
+                    relatedToVideoId: idVideo,
+                    key: KEY,
+                    part: 'snippet',
+                    type: 'video',
+                    maxResults: 4
+                }})
+            setvideos([{ 
+                primary: primaryVideo.data,
+                related: relatedVideo.data
+            }]);
+        }
+        getData();
+    }, [])
+
+
+
+    // opts primario
     const opts = {
-        height: '390',
-        width: '640',
+        height:  window.innerWidth > 768 ? '480' : '240',
+        width: '100%',
         playerVars: {
           // https://developers.google.com/youtube/player_parameters
-          autoplay: 1,
+          autoplay: 0,
         },
       };
+    
+    const optsRelated = {
+      height: '155',
+      width: '100%',
+    };
 
-      function _onReady(event) {
-        // access to player in all event handlers via event.target
-        event.target.pauseVideo();
-      }
 
-    return ( 
-        <Fragment>
-            <YouTube videoId="2g811Eo7K8U" opts={opts} onReady={_onReady} />
-        </Fragment>
-     );
+    if (videos !== null ) {
+        return ( 
+            <Fragment>
+                <Grid container spacing={2}>
+                    <Grid item lg={8} xs={12}>
+                        <YouTube videoId={videos[0].primary.items[0].id} opts={opts}  />
+                        <h3>{videos[0].primary.items[0].snippet.title}</h3>
+                        <p>{videos[0].primary.items[0].snippet.description}</p>
+                    </Grid>
+                    <Grid item lg={4} xs={12}>
+                        <Grid container spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
+                            {videos[0].related.items.map( video => (
+                                // Agregar key para el mapeo
+                                // Agregar onClick nuevo state de videos, primero que reproduzca y despues que cargue
+                                <Grid item>
+                                    <YouTube videoId={video.id.videoId} opts={optsRelated}  />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Fragment>
+        );
+    } else {
+        return (
+        <Skeleton variant="rect" width={opts.width} height={opts.height} />
+       )
+       // Agregar skeleto de los relacionados
+    }
 }
  
 export default YoutubeVideo;
