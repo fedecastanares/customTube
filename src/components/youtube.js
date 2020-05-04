@@ -2,7 +2,7 @@ import React, { Fragment , useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import axios from 'axios';
 import {Skeleton} from '@material-ui/lab'
-import {Grid } from '@material-ui/core'
+import {Grid, Container } from '@material-ui/core'
 
 const KEY = '';
 const baseURL = 'https://www.googleapis.com/youtube/v3';
@@ -61,13 +61,15 @@ const YoutubeVideo = () => {
                 <Grid container spacing={2}>
                     <Grid item lg={8} xs={12}>
                         <YouTube videoId={videos[0].primary.items[0].id} opts={opts}  />
-                        <h3>{videos[0].primary.items[0].snippet.title}</h3>
-                        <p>{videos[0].primary.items[0].snippet.description}</p>
+                        <Container>
+                            <h3>{videos[0].primary.items[0].snippet.title}</h3>
+                            <p>{videos[0].primary.items[0].snippet.description}</p>
+                        </Container>
                     </Grid>
                     <Grid item lg={4} xs={12}>
                         <Grid container spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
                             {videos[0].related.items.map( video => (
-                                // Agregar key para el mapeo
+                                // Agregar key para el map
                                 // Agregar onClick nuevo state de videos, primero que reproduzca y despues que cargue
                                 <Grid item>
                                     <YouTube videoId={video.id.videoId} opts={optsRelated}  />
@@ -80,7 +82,11 @@ const YoutubeVideo = () => {
         );
     } else {
         return (
-        <Skeleton variant="rect" width={opts.width} height={opts.height} />
+            <Fragment>
+                <Skeleton variant="rect" width={opts.width} height={opts.height} animation="wave"/>
+                <Skeleton animation="wave"/>
+                <Skeleton width="60%" animation="wave"/>
+            </Fragment>
        )
        // Agregar skeleto de los relacionados
     }
