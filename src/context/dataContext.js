@@ -5,7 +5,7 @@ export const DataContext = createContext();
 
 const DataProvider = (props) => {
 
-    const KEY = 'AIzaSyC7qdPm7aCYuNt_5s_w8QsOGVtVfPvskrE';
+    const KEY = 'AIzaSyAIfceSqlvQFE8gXX2CimVCytuqu1TZzsY';
     const baseURL = 'https://www.googleapis.com/youtube/v3';
 
     const [darkMode, setdarkMode] = useState(true);
