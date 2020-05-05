@@ -6,47 +6,56 @@ import {Skeleton} from '@material-ui/lab'
 import {Grid, Container, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 
-const KEY = '';
-const baseURL = 'https://www.googleapis.com/youtube/v3';
+
 
 const useStyles = makeStyles(theme => ({ 
     videoSkeleton: {
         height: '100%',
         color: theme.palette.contrast
-     }
+     },
+    relatedVideo:{
+        marginTop: '5vh',
+        marginBottom: '5vh',
+        [theme.breakpoints.up('sm')]:{
+            margin: 0,
+        }
+    }
 }));
 
 const YoutubeVideo = () => {
 
+    
     const classes = useStyles();
-    const {idVideo} = useContext(DataContext);
+    const {idVideo, KEY, baseURL} = useContext(DataContext);
 
     const [videos, setvideos] = useState(null);
     
 
     useEffect(() => {
-        const getData = async () =>{
-            const primaryVideo = await axios.get(baseURL + '/videos', {
-                params: {
-                    id: idVideo, 
-                    key: KEY,
-                    part: 'snippet'
-                }
-            })
-            const relatedVideo = await axios.get(baseURL + '/search', {
-                params: {
-                    relatedToVideoId: idVideo,
-                    key: KEY,
-                    part: 'snippet',
-                    type: 'video',
-                    maxResults: 4
-                }})
-            /* setvideos([{ 
-                primary: primaryVideo.data,
-                related: relatedVideo.data
-            }]); */
+        if (idVideo !== undefined && idVideo !== '') {
+            const getData = async () =>{
+                const primaryVideo = await axios.get(baseURL + '/videos', {
+                    params: {
+                        id: idVideo, 
+                        key: KEY,
+                        part: 'snippet'
+                    }
+                })
+                const relatedVideo = await axios.get(baseURL + '/search', {
+                    params: {
+                        relatedToVideoId: idVideo,
+                        key: KEY,
+                        part: 'snippet',
+                        type: 'video',
+                        maxResults: 3
+                    }})
+                setvideos([{ 
+                    primary: primaryVideo.data,
+                    related: relatedVideo.data
+                }]); 
+            }
+            getData();
         }
-        getData();
     }, [idVideo])
 
 
@@ -78,8 +87,14 @@ const YoutubeVideo = () => {
                         </Container>
                     </Grid>
                     <Grid item lg={4} xs={12}>
-                        <Grid container spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
-                            
+                        <Grid container className={classes.relatedVideo} spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
+                            {videos[0].related.items.map( video => (
+                                    // Agregar key para el map
+                                    // Agregar onClick nuevo state de videos, primero que reproduzca y despues que cargue
+                                    <Grid item>
+                                        <YouTube videoId={video.id.videoId} opts={optsRelated}  />
+                                    </Grid>
+                                ))}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -108,16 +123,12 @@ const YoutubeVideo = () => {
                         </Container>
                     </Grid>
                     <Grid item lg={4} xs={12}>
-                        <Grid container spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
-                            <br/>
-                            <br/>
+                        <Grid container className={classes.relatedVideo} spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
                             <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
                             <br/>
                             <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
                             <br/>
                             <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
-                            <br/>
-                            <br/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -131,13 +142,7 @@ export default YoutubeVideo;
 
 /* tres videos
 
-{videos[0].related.items.map( video => (
-                                // Agregar key para el map
-                                // Agregar onClick nuevo state de videos, primero que reproduzca y despues que cargue
-                                <Grid item>
-                                    <YouTube videoId={video.id.videoId} opts={optsRelated}  />
-                                </Grid>
-                            ))}
+
 
 
                             */

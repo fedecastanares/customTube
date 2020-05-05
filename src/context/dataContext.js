@@ -1,16 +1,24 @@
-import React, { createContext,useState } from 'react';
+import React, { createContext, useState } from 'react';
+
 
 export const DataContext = createContext();
 
 const DataProvider = (props) => {
 
+    const KEY = 'AIzaSyC7qdPm7aCYuNt_5s_w8QsOGVtVfPvskrE';
+    const baseURL = 'https://www.googleapis.com/youtube/v3';
+
     const [darkMode, setdarkMode] = useState(true);
-    const [search, setsearch] = useState(null);
-    const [idVideo, setidVideo] = useState('QNwhAdrdwp0');
+    const [search, setsearch] = useState('');
+    const [idVideo, setidVideo] = useState('');
+
+    
 
     return ( 
         <DataContext.Provider
         value={{
+            KEY,
+            baseURL,
             darkMode,
             search,
             idVideo,

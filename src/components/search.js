@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import axios from 'axios'
 import {DataContext} from '../context/dataContext.js'
 
 import {Button, Grid} from '@material-ui/core'
@@ -49,10 +50,23 @@ const useStyles = makeStyles(theme => ({
 const Search = () => {
 
     const classes = useStyles();
-    const {search, setsearch} = useContext(DataContext);
+    const {search, setsearch, baseURL, KEY, setidVideo } = useContext(DataContext);
 
     const handleSubmit = event => {
         event.preventDefault();
+        const getId = async () =>{
+            const video = await axios.get(baseURL + '/search', {
+                params: {
+                    q: search, 
+                    key: KEY,
+                    part: 'snippet',
+                    maxResults: 1,
+                    type: 'video'
+                }
+            })
+            setidVideo(video.data.items[0].id.videoId);
+        }
+        getId();
     }
 
     const handleChange =(event) => {
