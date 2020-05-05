@@ -1,22 +1,34 @@
-import React, { Fragment , useState, useEffect } from 'react';
+import React, { Fragment , useState, useEffect, useContext } from 'react';
+import {DataContext} from '../context/dataContext.js'
 import YouTube from 'react-youtube';
 import axios from 'axios';
 import {Skeleton} from '@material-ui/lab'
-import {Grid, Container } from '@material-ui/core'
+import {Grid, Container, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
 
 const KEY = '';
 const baseURL = 'https://www.googleapis.com/youtube/v3';
 
+const useStyles = makeStyles(theme => ({ 
+    videoSkeleton: {
+        height: '100%',
+        color: theme.palette.contrast
+     }
+}));
+
 const YoutubeVideo = () => {
 
+    const classes = useStyles();
+    const {idVideo} = useContext(DataContext);
+
     const [videos, setvideos] = useState(null);
-    const idVideo = 'QNwhAdrdwp0';
+    
 
     useEffect(() => {
         const getData = async () =>{
             const primaryVideo = await axios.get(baseURL + '/videos', {
                 params: {
-                    id: idVideo,
+                    id: idVideo, 
                     key: KEY,
                     part: 'snippet'
                 }
@@ -29,13 +41,13 @@ const YoutubeVideo = () => {
                     type: 'video',
                     maxResults: 4
                 }})
-            setvideos([{ 
+            /* setvideos([{ 
                 primary: primaryVideo.data,
                 related: relatedVideo.data
-            }]);
+            }]); */
         }
         getData();
-    }, [])
+    }, [idVideo])
 
 
 
@@ -44,7 +56,6 @@ const YoutubeVideo = () => {
         height:  window.innerWidth > 768 ? '480' : '240',
         width: '100%',
         playerVars: {
-          // https://developers.google.com/youtube/player_parameters
           autoplay: 0,
         },
       };
@@ -68,24 +79,48 @@ const YoutubeVideo = () => {
                     </Grid>
                     <Grid item lg={4} xs={12}>
                         <Grid container spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
-                            {videos[0].related.items.map( video => (
-                                // Agregar key para el map
-                                // Agregar onClick nuevo state de videos, primero que reproduzca y despues que cargue
-                                <Grid item>
-                                    <YouTube videoId={video.id.videoId} opts={optsRelated}  />
-                                </Grid>
-                            ))}
+                            
                         </Grid>
                     </Grid>
                 </Grid>
             </Fragment>
         );
     } else {
+        
         return (
             <Fragment>
-                <Skeleton variant="rect" width={opts.width} height={opts.height} animation="wave"/>
-                <Skeleton animation="wave"/>
-                <Skeleton width="60%" animation="wave"/>
+                <Grid container spacing={2}>
+                    <Grid item lg={8} xs={12}>
+                        <Skeleton variant="rect" width={opts.width} height={opts.height + 'px'} animation="wave">
+                            <Grid className={classes.videoSkeleton} container justify='center' alignContent='center' alignItems='center'>
+                                <Typography>
+                                    Search something
+                                </Typography>
+                            </Grid>
+                        </Skeleton>
+                        <br/>
+                        <Container>
+                            <Skeleton animation="wave"/>
+                            <br/>
+                            <Skeleton  animation="wave"/>
+                            <Skeleton  animation="wave"/>
+                            <Skeleton width="60%" animation="wave"/>
+                        </Container>
+                    </Grid>
+                    <Grid item lg={4} xs={12}>
+                        <Grid container spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
+                            <br/>
+                            <br/>
+                            <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
+                            <br/>
+                            <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
+                            <br/>
+                            <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
+                            <br/>
+                            <br/>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Fragment>
        )
        // Agregar skeleto de los relacionados
@@ -93,3 +128,16 @@ const YoutubeVideo = () => {
 }
  
 export default YoutubeVideo;
+
+/* tres videos
+
+{videos[0].related.items.map( video => (
+                                // Agregar key para el map
+                                // Agregar onClick nuevo state de videos, primero que reproduzca y despues que cargue
+                                <Grid item>
+                                    <YouTube videoId={video.id.videoId} opts={optsRelated}  />
+                                </Grid>
+                            ))}
+
+
+                            */

@@ -1,12 +1,21 @@
 import React, { Fragment } from 'react';
 import './App.css';
+import DataProvider from './context/dataContext.js'
+
+
 
 import Body from './components/body.js'
 
 function App() {
+
+
+
+
   return (
     <Fragment>
-      <Body/>
+      <DataProvider>
+       <Body/>
+      </DataProvider>
     </Fragment>
   );
 }

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import {DataContext} from '../context/dataContext.js'
+
 import {Button, Grid} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
@@ -20,7 +22,6 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]: {
           marginLeft: 0,
         },
-        backgroundColor: 'pink'
       },
       searchIcon: {
         padding: theme.spacing(0, 2),
@@ -48,42 +49,43 @@ const useStyles = makeStyles(theme => ({
 const Search = () => {
 
     const classes = useStyles();
+    const {search, setsearch} = useContext(DataContext);
 
-    function handleSubmit(event) {
+    const handleSubmit = event => {
         event.preventDefault();
-        console.log('submit');
     }
 
-    function handleChange(event) {
-
+    const handleChange =(event) => {
+        setsearch(event.target.value);
     }
     return ( 
         <div className={classes.root}>
-            <form onSubmit={handleSubmit} autoComplete='off'>
+            <form  autoComplete='off'  onSubmit={handleSubmit}>
                 <Grid container spacing={2} justify='center' alignContent='center' alignItems='center'>
                     <Grid item lg={8} xs={8}>
-                        <div className={classes.search}>
-                            <div className={classes.searchIcon}>
-                                <SearchIcon />
-                            </div>
-                            <InputBase
-                            placeholder="Search.. &nbsp;&nbsp;&nbsp;"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                            name='search'
-                            onChange={handleChange}
-                            />
+                    <div className={classes.search}>
+                        <div className={classes.searchIcon}>
+                            <SearchIcon />
+                        </div>
+                        <InputBase
+                        placeholder="Search.. &nbsp;&nbsp;&nbsp;"
+                        classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput,
+                        }}
+                        inputProps={{ 'aria-label': 'search' }}
+                        name='search'
+                        onChange={handleChange}
+                        value={search}
+                        />
                         </div>
                     </Grid>
                     <Grid item lg={4} xs={3}>
                         <Grid container justify='center'>
                             <Grid item lg={9} xs={12}>
-                            <Button variant="contained" color="primary" type="submit" fullWidth>
-                            Search
-                            </Button>
+                                <Button variant="contained" color="primary" type="submit" fullWidth style={{marginTop:'0.1vh'}}>
+                                    Search
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>
