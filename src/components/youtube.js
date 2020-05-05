@@ -60,7 +60,7 @@ const YoutubeVideo = () => {
 
 
 
-    // opts primario
+
     const opts = {
         height:  window.innerWidth > 768 ? '480' : '240',
         width: '100%',
@@ -134,15 +134,7 @@ const YoutubeVideo = () => {
                 </Grid>
             </Fragment>
        )
-       // Agregar skeleto de los relacionados
     }
 }
  
 export default YoutubeVideo;
-
-/* tres videos
-
-
-
-
-                            */
