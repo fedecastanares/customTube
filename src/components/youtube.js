@@ -41,14 +41,14 @@ const YoutubeVideo = () => {
                         part: 'snippet'
                     }
                 })
-                // Max results en 3 devuelve 2
+                // Max results en 3 a veces devuelve 2
                 const relatedVideo = await axios.get(baseURL + '/search', {
                     params: {
                         relatedToVideoId: idVideo,
                         key: KEY,
                         part: 'snippet',
                         type: 'video',
-                        maxResults: 4
+                        maxResults: 3
                     }})
                 setvideos([{ 
                     primary: primaryVideo.data,
