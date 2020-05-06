@@ -47,7 +47,7 @@ const YoutubeVideo = () => {
                         key: KEY,
                         part: 'snippet',
                         type: 'video',
-                        maxResults: 4
+                        maxResults: 3
                     }})
                 setvideos([{ 
                     primary: primaryVideo.data,
@@ -80,7 +80,7 @@ const YoutubeVideo = () => {
     };
 
 
-    if (videos !== null ) {
+    if (videos !== null && loading === false) {
         return ( 
             <Fragment>
                 <Grid container spacing={2}>
@@ -127,6 +127,7 @@ const YoutubeVideo = () => {
                             <Skeleton  animation="wave"/>
                             <Skeleton  animation="wave"/>
                             <Skeleton width="60%" animation="wave"/>
+                            
                         </Container>
                     </Grid>
                     <Grid item lg={4} xs={12}>
