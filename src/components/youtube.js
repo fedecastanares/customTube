@@ -81,7 +81,7 @@ const YoutubeVideo = () => {
     };
 
 
-    if (videos !== null && loading === false) {
+    if (  loading === false && videos !== null ? videos[0].primary.items[0].id === idVideo : 1 === 2) {
         return ( 
             <Fragment>
                 <Grid container spacing={2}>
