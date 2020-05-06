@@ -47,7 +47,7 @@ const YoutubeVideo = () => {
                         key: KEY,
                         part: 'snippet',
                         type: 'video',
-                        maxResults: 3
+                        maxResults: 4
                     }})
                 setvideos([{ 
                     primary: primaryVideo.data,
