@@ -11,7 +11,7 @@ const DataProvider = (props) => {
     const [darkMode, setdarkMode] = useState(true);
     const [search, setsearch] = useState('');
     const [idVideo, setidVideo] = useState('');
-
+    const [loading, setloading] = useState(false);
     
 
     return ( 
@@ -22,8 +22,10 @@ const DataProvider = (props) => {
             darkMode,
             search,
             idVideo,
+            loading,
             setsearch,
             setidVideo,
+            setloading
         }}>
             {props.children}
         </DataContext.Provider>

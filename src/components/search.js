@@ -50,10 +50,11 @@ const useStyles = makeStyles(theme => ({
 const Search = () => {
 
     const classes = useStyles();
-    const {search, setsearch, baseURL, KEY, setidVideo } = useContext(DataContext);
+    const {search, setsearch, baseURL, KEY, setidVideo, setloading } = useContext(DataContext);
 
     const handleSubmit = event => {
         event.preventDefault();
+        setloading(true);
         const getId = async () =>{
             const video = await axios.get(baseURL + '/search', {
                 params: {

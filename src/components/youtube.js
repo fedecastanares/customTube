@@ -3,7 +3,7 @@ import {DataContext} from '../context/dataContext.js'
 import YouTube from 'react-youtube';
 import axios from 'axios';
 import {Skeleton} from '@material-ui/lab'
-import {Grid, Container, Typography } from '@material-ui/core'
+import {Grid, Container, Typography, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 
 
@@ -26,7 +26,7 @@ const YoutubeVideo = () => {
 
     
     const classes = useStyles();
-    const {idVideo, KEY, baseURL} = useContext(DataContext);
+    const {idVideo, KEY, baseURL, loading, setloading} = useContext(DataContext);
 
     const [videos, setvideos] = useState(null);
     
@@ -55,10 +55,13 @@ const YoutubeVideo = () => {
                 }]); 
             }
             getData();
+            setloading(false)
         }
     }, [idVideo])
 
-
+    const handlePlay = event => {
+        console.log(event);
+    }
 
 
     const opts = {
@@ -89,10 +92,9 @@ const YoutubeVideo = () => {
                     <Grid item lg={4} xs={12}>
                         <Grid container className={classes.relatedVideo} spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
                             {videos[0].related.items.map( video => (
-                                    // Agregar key para el map
                                     // Agregar onClick nuevo state de videos, primero que reproduzca y despues que cargue
-                                    <Grid item>
-                                        <YouTube videoId={video.id.videoId} opts={optsRelated}  />
+                                    <Grid item key={video.id.videoId}>
+                                        <YouTube videoId={video.id.videoId} opts={optsRelated} id={video.id.videoId} onPlay={handlePlay}/>
                                     </Grid>
                                 ))}
                         </Grid>
@@ -102,15 +104,19 @@ const YoutubeVideo = () => {
         );
     } else {
         
+
         return (
             <Fragment>
                 <Grid container spacing={2}>
                     <Grid item lg={8} xs={12}>
                         <Skeleton variant="rect" width={opts.width} height={opts.height + 'px'} animation="wave">
                             <Grid className={classes.videoSkeleton} container justify='center' alignContent='center' alignItems='center'>
+                                {loading === false && idVideo === '' ? 
                                 <Typography>
                                     Search something
-                                </Typography>
+                                </Typography> : 
+                                <CircularProgress color="primary" /> 
+                                }
                             </Grid>
                         </Skeleton>
                         <br/>
