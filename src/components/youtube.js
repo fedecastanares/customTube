@@ -26,7 +26,7 @@ const YoutubeVideo = () => {
 
     
     const classes = useStyles();
-    const {idVideo, KEY, baseURL, loading, setloading} = useContext(DataContext);
+    const {idVideo, KEY, baseURL, loading, setloading, setidVideo} = useContext(DataContext);
 
     const [videos, setvideos] = useState(null);
     
@@ -59,8 +59,10 @@ const YoutubeVideo = () => {
         }
     }, [idVideo])
 
-    const handlePlay = event => {
-        console.log(event);
+    const handleStateChange = event => {
+        if ( event.target.g.g.videoId !== idVideo) {
+            setidVideo(event.target.g.g.videoId);
+        }
     }
 
 
@@ -91,10 +93,9 @@ const YoutubeVideo = () => {
                     </Grid>
                     <Grid item lg={4} xs={12}>
                         <Grid container className={classes.relatedVideo} spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
-                            {videos[0].related.items.map( video => (
-                                    // Agregar onClick nuevo state de videos, primero que reproduzca y despues que cargue
+                            {videos[0].related.items.map( (video) => (
                                     <Grid item key={video.id.videoId}>
-                                        <YouTube videoId={video.id.videoId} opts={optsRelated} id={video.id.videoId} onPlay={handlePlay}/>
+                                        <YouTube videoId={video.id.videoId} opts={optsRelated} id={video.id.videoId} onStateChange={handleStateChange} />
                                     </Grid>
                                 ))}
                         </Grid>
