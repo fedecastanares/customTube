@@ -48,7 +48,7 @@ const YoutubeVideo = () => {
                         key: KEY,
                         part: 'snippet',
                         type: 'video',
-                        maxResults: 3
+                        maxResults: 4
                     }})
                 setvideos([{ 
                     primary: primaryVideo.data,
@@ -94,10 +94,12 @@ const YoutubeVideo = () => {
                     </Grid>
                     <Grid item lg={4} xs={12}>
                         <Grid container className={classes.relatedVideo} spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
-                            {videos[0].related.items.map( (video) => (
+                            {videos[0].related.items.map( (video, i) => (
+                                    i < 3 ?
                                     <Grid item key={video.id.videoId}>
                                         <YouTube videoId={video.id.videoId} opts={optsRelated} id={video.id.videoId} onStateChange={handleStateChange} />
-                                    </Grid>
+                                    </Grid> :
+                                    null
                                 ))}
                         </Grid>
                     </Grid>
