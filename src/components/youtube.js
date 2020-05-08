@@ -19,6 +19,9 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.up('sm')]:{
             margin: 0,
         }
+    },
+    space:{
+        paddingTop: '1rem'
     }
 }));
 
@@ -96,7 +99,7 @@ const YoutubeVideo = () => {
                         <Grid container className={classes.relatedVideo} spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
                             {videos[0].related.items.map( (video, i) => (
                                     i < 3 ?
-                                    <Grid item key={video.id.videoId}>
+                                    <Grid item key={video.id.videoId} lg={9} xs={12}>
                                         <YouTube videoId={video.id.videoId} opts={optsRelated} id={video.id.videoId} onStateChange={handleStateChange} />
                                     </Grid> :
                                     null
@@ -123,10 +126,10 @@ const YoutubeVideo = () => {
                                 }
                             </Grid>
                         </Skeleton>
-                        <br/>
+                        <div className={classes.space}></div>
                         <Container>
                             <Skeleton animation="wave"/>
-                            <br/>
+                            <div className={classes.space}></div>
                             <Skeleton  animation="wave"/>
                             <Skeleton  animation="wave"/>
                             <Skeleton width="60%" animation="wave"/>
@@ -136,9 +139,9 @@ const YoutubeVideo = () => {
                     <Grid item lg={4} xs={12}>
                         <Grid container className={classes.relatedVideo} spacing={1} direction="column" justify='center' alignContent='center' alignItems='center'>
                             <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
-                            <br/>
+                            <div className={classes.space}></div>
                             <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
-                            <br/>
+                            <div className={classes.space}></div>
                             <Skeleton variant="rect" width={'70%'} height={optsRelated.height + 'px'} animation="wave"/>
                         </Grid>
                     </Grid>
