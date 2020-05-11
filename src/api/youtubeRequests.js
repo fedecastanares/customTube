@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { KEY } from './key.js'
+import { KEY } from './.key.js'
 
 
 const baseURL = 'https://www.googleapis.com/youtube/v3';
