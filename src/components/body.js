@@ -45,8 +45,8 @@ const Body = () => {
             <Fragment>
                 <ThemeProvider theme={theme}>
                     <Paper elevation={0} style={{minHeight: '100vh'}}>
-                            <Search/>
-                            <YoutubeVideo/>
+                        <Search/>
+                        <YoutubeVideo/>
                     </Paper>
                 </ThemeProvider>
             </Fragment>

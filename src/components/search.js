@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import axios from 'axios'
+import {searchRequest} from '../api/youtubeRequests.js'
 import {DataContext} from '../context/dataContext.js'
 
 import {Button, Grid} from '@material-ui/core'
@@ -50,21 +50,13 @@ const useStyles = makeStyles(theme => ({
 const Search = () => {
 
     const classes = useStyles();
-    const {search, setsearch, baseURL, KEY, setidVideo, setloading } = useContext(DataContext);
+    const {search, setsearch, setidVideo, setloading } = useContext(DataContext);
 
     const handleSubmit = event => {
         event.preventDefault();
         setloading(true);
         const getId = async () =>{
-            const video = await axios.get(baseURL + '/search', {
-                params: {
-                    q: search, 
-                    key: KEY,
-                    part: 'snippet',
-                    maxResults: 1,
-                    type: 'video'
-                }
-            })
+            const video = await searchRequest(search);
             setidVideo(video.data.items[0].id.videoId);
         }
         getId();
@@ -73,6 +65,8 @@ const Search = () => {
     const handleChange =(event) => {
         setsearch(event.target.value);
     }
+
+    
     return ( 
         <div className={classes.root}>
             <form  autoComplete='off'  onSubmit={handleSubmit}>

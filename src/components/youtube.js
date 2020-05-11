@@ -1,10 +1,10 @@
 import React, { Fragment , useState, useEffect, useContext } from 'react';
 import {DataContext} from '../context/dataContext.js'
 import YouTube from 'react-youtube';
-import axios from 'axios';
 import {Skeleton} from '@material-ui/lab'
-import {Grid, Container, Typography, CircularProgress } from '@material-ui/core'
+import {Grid, Container,  CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
+import {videosRequest} from '../api/youtubeRequests.js'
 
 
 
@@ -29,7 +29,7 @@ const YoutubeVideo = () => {
 
     
     const classes = useStyles();
-    const {idVideo, KEY, baseURL, loading, setloading, setidVideo} = useContext(DataContext);
+    const {idVideo, loading, setloading, setidVideo} = useContext(DataContext);
 
     const [videos, setvideos] = useState(null);
     
@@ -37,26 +37,8 @@ const YoutubeVideo = () => {
     useEffect(() => {
         if (idVideo !== undefined && idVideo !== '') {
             const getData = async () =>{
-                const primaryVideo = await axios.get(baseURL + '/videos', {
-                    params: {
-                        id: idVideo, 
-                        key: KEY,
-                        part: 'snippet'
-                    }
-                })
-                // Max results en 3 a veces devuelve 2
-                const relatedVideo = await axios.get(baseURL + '/search', {
-                    params: {
-                        relatedToVideoId: idVideo,
-                        key: KEY,
-                        part: 'snippet',
-                        type: 'video',
-                        maxResults: 4
-                    }})
-                setvideos([{ 
-                    primary: primaryVideo.data,
-                    related: relatedVideo.data
-                }]); 
+                const videos = await videosRequest(idVideo);
+                setvideos(videos);
             }
             getData();
             setloading(false)
@@ -111,19 +93,16 @@ const YoutubeVideo = () => {
         );
     } else {
         
-
+        if (idVideo === '') {
+            return ( <Fragment/> )    
+        } else {
         return (
             <Fragment>
                 <Grid container spacing={2}>
                     <Grid item lg={8} xs={12}>
                         <Skeleton variant="rect" width={opts.width} height={opts.height + 'px'} animation="wave">
                             <Grid className={classes.videoSkeleton} container justify='center' alignContent='center' alignItems='center'>
-                                {loading === false && idVideo === '' ? 
-                                <Typography>
-                                    Search something
-                                </Typography> : 
                                 <CircularProgress color="primary" /> 
-                                }
                             </Grid>
                         </Skeleton>
                         <div className={classes.space}></div>
@@ -148,6 +127,7 @@ const YoutubeVideo = () => {
                 </Grid>
             </Fragment>
        )
+    }
     }
 }
  
